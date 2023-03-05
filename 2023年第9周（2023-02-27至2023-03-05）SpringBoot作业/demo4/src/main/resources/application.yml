@@ -1,0 +1,9 @@
+server:
+  port:3306
+
+spring:
+  datasource:
+    driver-Class-Name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: jdjisw0317
+    url: jdbc:mysql://localhost:3306/test
