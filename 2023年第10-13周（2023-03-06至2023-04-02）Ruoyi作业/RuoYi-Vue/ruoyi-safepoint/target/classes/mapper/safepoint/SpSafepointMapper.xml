@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.safepoint.mapper.SpSafepointMapper">
+    
+    <resultMap type="SpSafepoint" id="SpSafepointResult">
+        <result property="safepointId"    column="safepoint_id"    />
+        <result property="safepointName"    column="safepoint_name"    />
+        <result property="safepointDepartment"    column="safepoint_department"    />
+        <result property="safepointClassification"    column="safepoint_classification"    />
+        <result property="safepointProject"    column="safepoint_project"    />
+        <result property="safepointProjectpoint"    column="safepoint_projectpoint"    />
+        <result property="safepointRisklevel"    column="safepoint_risklevel"    />
+        <result property="safepointDangerlevel"    column="safepoint_dangerlevel"    />
+    </resultMap>
+
+    <sql id="selectSpSafepointVo">
+        select safepoint_id, safepoint_name, safepoint_department, safepoint_classification, safepoint_project, safepoint_projectpoint, safepoint_risklevel, safepoint_dangerlevel from sp_safepoint
+    </sql>
+
+    <select id="selectSpSafepointList" parameterType="SpSafepoint" resultMap="SpSafepointResult">
+        <include refid="selectSpSafepointVo"/>
+        <where>  
+            <if test="safepointName != null  and safepointName != ''"> and safepoint_name like concat('%', #{safepointName}, '%')</if>
+            <if test="safepointDepartment != null  and safepointDepartment != ''"> and safepoint_department = #{safepointDepartment}</if>
+            <if test="safepointClassification != null  and safepointClassification != ''"> and safepoint_classification = #{safepointClassification}</if>
+            <if test="safepointProject != null  and safepointProject != ''"> and safepoint_project = #{safepointProject}</if>
+            <if test="safepointProjectpoint != null  and safepointProjectpoint != ''"> and safepoint_projectpoint = #{safepointProjectpoint}</if>
+            <if test="safepointRisklevel != null "> and safepoint_risklevel = #{safepointRisklevel}</if>
+            <if test="safepointDangerlevel != null "> and safepoint_dangerlevel = #{safepointDangerlevel}</if>
+        </where>
+    </select>
+    
+    <select id="selectSpSafepointBySafepointId" parameterType="Integer" resultMap="SpSafepointResult">
+        <include refid="selectSpSafepointVo"/>
+        where safepoint_id = #{safepointId}
+    </select>
+        
+    <insert id="insertSpSafepoint" parameterType="SpSafepoint" useGeneratedKeys="true" keyProperty="safepointId">
+        insert into sp_safepoint
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="safepointName != null and safepointName != ''">safepoint_name,</if>
+            <if test="safepointDepartment != null and safepointDepartment != ''">safepoint_department,</if>
+            <if test="safepointClassification != null and safepointClassification != ''">safepoint_classification,</if>
+            <if test="safepointProject != null and safepointProject != ''">safepoint_project,</if>
+            <if test="safepointProjectpoint != null and safepointProjectpoint != ''">safepoint_projectpoint,</if>
+            <if test="safepointRisklevel != null">safepoint_risklevel,</if>
+            <if test="safepointDangerlevel != null">safepoint_dangerlevel,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="safepointName != null and safepointName != ''">#{safepointName},</if>
+            <if test="safepointDepartment != null and safepointDepartment != ''">#{safepointDepartment},</if>
+            <if test="safepointClassification != null and safepointClassification != ''">#{safepointClassification},</if>
+            <if test="safepointProject != null and safepointProject != ''">#{safepointProject},</if>
+            <if test="safepointProjectpoint != null and safepointProjectpoint != ''">#{safepointProjectpoint},</if>
+            <if test="safepointRisklevel != null">#{safepointRisklevel},</if>
+            <if test="safepointDangerlevel != null">#{safepointDangerlevel},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSpSafepoint" parameterType="SpSafepoint">
+        update sp_safepoint
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="safepointName != null and safepointName != ''">safepoint_name = #{safepointName},</if>
+            <if test="safepointDepartment != null and safepointDepartment != ''">safepoint_department = #{safepointDepartment},</if>
+            <if test="safepointClassification != null and safepointClassification != ''">safepoint_classification = #{safepointClassification},</if>
+            <if test="safepointProject != null and safepointProject != ''">safepoint_project = #{safepointProject},</if>
+            <if test="safepointProjectpoint != null and safepointProjectpoint != ''">safepoint_projectpoint = #{safepointProjectpoint},</if>
+            <if test="safepointRisklevel != null">safepoint_risklevel = #{safepointRisklevel},</if>
+            <if test="safepointDangerlevel != null">safepoint_dangerlevel = #{safepointDangerlevel},</if>
+        </trim>
+        where safepoint_id = #{safepointId}
+    </update>
+
+    <delete id="deleteSpSafepointBySafepointId" parameterType="Integer">
+        delete from sp_safepoint where safepoint_id = #{safepointId}
+    </delete>
+
+    <delete id="deleteSpSafepointBySafepointIds" parameterType="String">
+        delete from sp_safepoint where safepoint_id in 
+        <foreach item="safepointId" collection="array" open="(" separator="," close=")">
+            #{safepointId}
+        </foreach>
+    </delete>
+</mapper>
